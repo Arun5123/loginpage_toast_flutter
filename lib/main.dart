@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 void main() => runApp(const MyApp());
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -72,39 +73,25 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
       ),
     );
   }
+  void _showToast(String message) {
+    Fluttertoast.showToast(
+      msg: message,
+      timeInSecForIosWeb: 3,
+    );
+  }
   void _handleLogin() {
     String password = passwordController.text;
     if (validatePassword(password)) {
-      _showDialog('Login Successful', 'Welcome! You have successfully logged in.');
+      _showToast('Login Successful\nWelcome! You have successfully logged in.');
     } else {
-      _showDialog(
-        'Invalid Password',
-        'Password should be 8 to 15 characters long and contain at least one digit, one special character, and one uppercase and lowercase letter.',
+      _showToast(
+        'Invalid Password\nPassword should be 8 to 15 characters long and contain at least one digit, one special character, and one uppercase and lowercase letter.',
       );
     }
   }
-
   bool validatePassword(String password) {
     RegExp passwordRegExp = RegExp(
         r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#$%^&*()_+]).{8,15}$');
     return passwordRegExp.hasMatch(password);
-  }
-
-  void _showDialog(String title, String content) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(title),
-        content: Text(content),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: const Text('OK'),
-          ),
-        ],
-      ),
-    );
   }
 }
